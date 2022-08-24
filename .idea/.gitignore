@@ -1,3 +1,5 @@
 # Default ignored files
 /shelf/
 /workspace.xml
+# ignore DS_Store Mac log files
+**/.DS_Store
