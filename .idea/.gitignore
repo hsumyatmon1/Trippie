@@ -2,4 +2,4 @@
 /shelf/
 /workspace.xml
 # ignore DS_Store Mac log files
-**/.DS_Store
+*.DS_Store
