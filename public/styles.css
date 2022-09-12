@@ -1,0 +1,278 @@
+body {
+    padding-bottom: 20px;
+    font-family: "Signika Negative", sans-serif;
+}
+
+a {
+    text-decoration: none;
+    color: #000;
+}
+
+h3 {
+    line-height: 1.5;
+}
+
+/* Nav Bar */
+
+.bd-placeholder-img {
+    font-size: 1.125rem;
+    text-anchor: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
+
+#homepageLogo {
+    height: 3rem;
+    border-radius: 100%;
+}
+
+.masthead .masthead-cards .card {
+    margin-left: 1.5em;
+}
+
+@media (min-width: 768px) {
+    .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+    }
+}
+
+.b-example-divider {
+    height: 3rem;
+    background-color: rgba(0, 0, 0, 0.1);
+    border: solid rgba(0, 0, 0, 0.15);
+    border-width: 1px 0;
+    box-shadow: inset 0 0.5em 1.5em rgba(0, 0, 0, 0.1),
+        inset 0 0.125em 0.5em rgba(0, 0, 0, 0.15);
+}
+
+.b-example-vr {
+    flex-shrink: 0;
+    width: 1.5rem;
+    height: 100vh;
+}
+
+.bi {
+    vertical-align: -0.125em;
+    fill: currentColor;
+}
+
+.nav-scroller {
+    position: relative;
+    z-index: 2;
+    height: 2.75rem;
+    overflow-y: hidden;
+}
+
+.nav-scroller .nav {
+    display: flex;
+    flex-wrap: nowrap;
+    padding-bottom: 1rem;
+    margin-top: -1px;
+    overflow-x: auto;
+    text-align: center;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Get Started */
+
+.masthead {
+    padding: 3rem 0 7rem;
+    position: relative;
+    background-image: url("Front-end/Images/Services/Home Page BG.jpg");
+    background-size: cover;
+    z-index: 0;
+}
+
+.masthead svg.wave {
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+}
+
+.masthead h1 {
+    color: #fff;
+    font-weight: 700;
+    font-size: 2rem;
+    line-height: 2;
+    z-index: 1;
+    max-width: 25em;
+}
+
+.masthead h2 {
+    color: rgb(255, 255, 255);
+    font-weight: 600;
+    z-index: 1;
+    font-size: 1.2rem;
+    max-width: 25em;
+    line-height: 2;
+}
+
+.masthead a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: underline;
+    z-index: 1;
+}
+
+.masthead a:hover {
+    color: #fff;
+}
+
+.masthead a:active {
+    text-decoration: none;
+}
+
+@media (min-width: 992px) {
+    .masthead h1 {
+        font-size: 3rem;
+    }
+    .masthead h2 {
+        font-size: 1.5rem;
+    }
+}
+
+.masthead .masthead-cards {
+    position: relative;
+    z-index: 1;
+}
+
+.masthead .masthead-cards .shape {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.3);
+    top: 0;
+    left: 0;
+    z-index: -1;
+    border-radius: 30% 70% 70% 30%/30% 30% 70% 70%;
+}
+
+.masthead .masthead-cards .card {
+    opacity: 1;
+    width: 9rem;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    font-weight: 800;
+    letter-spacing: 0.05rem;
+    color: #212529;
+    transition: 0.15s all;
+}
+
+.masthead .masthead-cards .card:hover {
+    margin-top: -0.25rem;
+    margin-bottom: 0.25rem;
+}
+
+.masthead .masthead-cards .card:active {
+    margin-top: inherit;
+    margin-bottom: inherit;
+}
+
+.masthead .masthead-cards .card.border-bottom-blue:hover {
+    color: #2092ed;
+}
+
+.masthead .masthead-cards .card.border-bottom-green:hover {
+    color: #28a745;
+}
+
+.masthead .masthead-cards .card.border-bottom-red:hover {
+    color: #dd3d31;
+}
+
+.masthead .masthead-cards .card.border-bottom-yellow:hover {
+    color: #ffc107;
+}
+
+.masthead-page {
+    padding: 1rem 0 4rem;
+}
+
+@media (min-width: 992px) {
+    .masthead-page h1 {
+        font-size: 2.5rem;
+    }
+}
+
+.border-bottom-yellow {
+    border-color: #ffc107 !important;
+}
+
+.border-bottom-red {
+    border-color: #dd3d31 !important;
+}
+
+.border-bottom-blue {
+    border-color: #2092ed !important;
+}
+
+.border-bottom-green {
+    border-color: #28a745 !important;
+}
+
+.border-bottom-blue,
+.border-bottom-green,
+.border-bottom-red,
+.border-bottom-yellow {
+    border-bottom: 0.4rem solid !important;
+}
+.shadow-lg {
+    box-shadow: 0 2rem 1.5rem -1.5rem rgba(33, 37, 41, 0.15),
+        0 0 1.5rem 0.5rem rgba(33, 37, 41, 0.05) !important;
+}
+.border-0 {
+    border: 0 !important;
+}
+
+/* Popular Destinations */
+
+.card-cover {
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+}
+
+/* Service Page CSS */
+
+#serviceHeader {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+#listServices img {
+    width: "100%";
+    height: 10rem;
+}
+
+/* /myplans
+
+ Page CSS */
+#noPlans {
+    line-height: 2;
+    max-height: 100%;
+}
+
+/* FAQs CSS */
+#FAQs {
+    max-width: 80%;
+    margin-left: 10%;
+}
+
+/* Home page Sign Up */
+#signup a {
+    text-decoration: none;
+    width: 90%;
+    text-align: left;
+    align-items: left;
+}
+
+#signup .btn {
+    text-align: left;
+    padding-left: 12%;
+    padding-right: 12%;
+}
+
+#signup i {
+    padding-right: 10%;
+}
