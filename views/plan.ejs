@@ -1,0 +1,49 @@
+<%- include("partials/header"); -%>
+
+    <section class="hero">
+        <header id="header">
+            <a id="logo" href="#">logo</a>
+            <nav>
+                <a id="menu-icon">&#8801;</a>
+            </nav>
+        </header>
+        <header class="hero-header">
+            <h1 class="hero-title">A Trip to <%=foundID.destination%> from <%=foundID.startDate%> to
+                        <%=foundID.endDate%>.
+            </h1>
+        </header>
+        <footer class="hero-footer">
+            <a class="button button-primary" href="#">button one</a>
+            <a class="button" href="#">button two</a>
+        </footer>
+    </section>
+    <article>
+        <h2>Some additional content</h2>
+        <p>The rest of the page content continues below the hero. You can use the hero at the top of your page, e.g. the
+            home page. A hero is great to display a high quality picture together with tasty title.</p>
+        <p>Ad donec tincidunt torquent ultricies convallis sodales faucibus magna, fringilla lorem blandit sollicitudin
+            donec faucibus curae orci molestie, et proin curae aliquet venenatis ligula amet vivamus orci varius arcu.
+        </p>
+        <p>Laoreet fusce condimentum venenatis quisque imperdiet ornare cras faucibus convallis, pharetra habitasse
+            elementum ut bibendum per sociosqu phasellus etiam, velit faucibus integer torquent leo elementum maecenas
+            netus.</p>
+    </article>
+    <h3 class="display-5 fw-bold">Seems like you have a lot of things going on!</h1>
+        <div class="timeline">
+            <div class="container left">
+                <div class="content">
+                    <h2>
+                        <%=foundID.destination%>
+                    </h2>
+                    <p>Lorem ipsum..</p>
+                </div>
+            </div>
+            <div class="container right">
+                <div class="content">
+                    <h2>2016</h2>
+                    <p>Lorem ipsum..</p>
+                </div>
+            </div>
+        </div>
+        <!-- Footer -->
+        <%- include("partials/footer"); -%>

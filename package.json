@@ -1,34 +1,37 @@
 {
-    "name": "trippie",
-    "version": "1.0.0",
-    "description": "CP3407 Assignment Part 2 - Trippie",
-    "main": "script.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/hsumyatmon1/Trippie.git"
-    },
-    "author": "Hsu Myat Mon",
-    "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/hsumyatmon1/Trippie/issues"
-    },
-    "homepage": "https://github.com/hsumyatmon1/Trippie#readme",
-    "dependencies": {
-        "body-parser": "^1.20.0",
-        "dotenv": "^16.0.2",
-        "ejs": "^3.1.8",
-        "express": "^4.18.1",
-        "express-session": "^1.17.3",
-        "lodash": "^4.17.21",
-        "mongoose": "^6.6.0",
-        "mongoose-findorcreate": "^3.0.0",
-        "passport": "^0.6.0",
-        "passport-facebook": "^3.0.0",
-        "passport-google-oauth20": "^2.0.0",
-        "passport-local": "^1.0.0",
-        "passport-local-mongoose": "^7.1.2"
-    }
+  "name": "trippie",
+  "version": "1.0.0",
+  "description": "CP3407 Assignment",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hsumyatmon1/Trippie.git"
+  },
+  "author": "Hsu Myat Mon",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hsumyatmon1/Trippie/issues"
+  },
+  "homepage": "https://github.com/hsumyatmon1/Trippie#readme",
+  "dependencies": {
+    "@mailchimp/mailchimp_marketing": "^3.0.78",
+    "axios": "^0.27.2",
+    "body-parser": "^1.20.0",
+    "dotenv": "^16.0.2",
+    "ejs": "^3.1.8",
+    "express": "^4.18.1",
+    "express-session": "^1.17.3",
+    "https": "^1.0.0",
+    "mongoose": "^6.6.1",
+    "mongoose-findorcreate": "^3.0.0",
+    "node": "^18.9.0",
+    "nodemon": "^2.0.20",
+    "passport": "^0.6.0",
+    "passport-facebook": "^3.0.0",
+    "passport-google-oauth20": "^2.0.0",
+    "passport-local-mongoose": "^7.1.2"
+  }
 }

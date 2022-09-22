@@ -1,97 +1,133 @@
 <%- include("partials/header"); -%>
-    <div class="modal modal-signin position-static d-block py-5" tabindex="-1" role="dialog" id="modalSignin">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content rounded-4 shadow">
-                <div class="modal-header p-5 pb-4 border-bottom-0">
-                    <!-- <h5 class="modal-title">Modal title</h5> -->
-                    <h2 class="fw-bold mb-0">Trippie Planner</h2>
-                    <a type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" href="/"></a>
-                </div>
+    <form action="/planner" method="post">
+        <div class="modal modal-planner position-static d-block" tabindex="-1" role="dialog" id="modalPlanner">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content rounded-4 shadow">
+                    <div class="modal-header p-5 pb-4 border-bottom-0">
+                        <!-- <h5 class="modal-title">Modal title</h5> -->
+                        <h2 class="fw-bold mb-0">Trippie Planner</h2>
+                        <a type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" href="/"></a>
+                    </div>
 
-                <div class="modal-body p-5 pt-0">
-                    <form class="" action="/planner" method="post">
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control rounded-3" id="floatingInput"
-                                placeholder="Singapore">
-                            <label for="floatingInput">Destination</label>
-                        </div>
+                    <div class="modal-body p-5 pt-0">
+                        <form class="" action="/planner" method="post">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control rounded-3" id="floatingInput"
+                                    placeholder="Singapore" name="destination" required>
+                                <label for="floatingInput">Destination</label>
+                            </div>
+                            <div class="row">
+                                <div class="col align-items-start">
+                                    <div class="form-floating mb-3">
+                                        <input type="number" class="form-control rounded-3" id="floatingAdult"
+                                            placeholder="2" name="adult" min="1" required value="2">
+                                        <label for="floatingAdult">Adults</label>
+                                    </div>
+                                </div>
 
-                        <div class="row">
-                            <div class="col align-items-start">
-                                <div class="form-floating mb-3">
-                                    <input type="date" class="form-control rounded-3" id="floatingStartDate"
-                                        placeholder="Singapore">
-                                    <label for="floatingInput">Start Date</label>
+                                <div class="col align-items-start">
+                                    <div class="form-floating mb-3">
+                                        <input type="number" class="form-control rounded-3" id="floatingChildren"
+                                            placeholder="0" name="children" min="0" required value="0">
+                                        <label for="floatingChildren">Children</label>
+                                    </div>
+                                </div>
+
+                                <%- include("partials/currency"); -%>
+
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col align-items-start">
+                                    <div class="form-floating mb-3">
+                                        <input type="date" class="form-control rounded-3 bfh-datepicker"
+                                            data-min="today" data-close="false" id="floatingStartDate"
+                                            placeholder="Start Date" name="startDate" min-date="today" required
+                                            value="today">
+                                        <label for="floatingStartDate">Start Date</label>
+                                    </div>
+                                </div>
+
+                                <div class="col align-items-start">
+                                    <div class="form-floating mb-3">
+                                        <input type="date" class="form-control rounded-3 bfh-datepicker"
+                                            data-min="today" data-close="false" id="floatingEndDate"
+                                            placeholder="End Date" name="endDate" min-date="" required>
+                                        <label for="floatingEndDate">End Date</label>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <hr class="my-4">
+                            <h5>Activites & Preferences (optional)
+                            </h5>
+                            <div id="activites-and-preferences" class="row">
+                                <div class="form-check form-check-inline col align-items-start">
+                                    <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="Culture"
+                                        name="activities" />
+                                    <label class="form-check-label" for="inlineCheckbox1">Culture</label>
+                                </div>
+
+                                <div class="form-check form-check-inline col align-items-start">
+                                    <input class="form-check-input" type="checkbox" id="inlineCheckbox2"
+                                        value="Outdoors" name="activities" />
+                                    <label class="form-check-label" for="inlineCheckbox2">Outdoors</label>
+                                </div>
+
+                                <div class="form-check form-check-inline col align-items-start">
+                                    <input class="form-check-input" type="checkbox" id="inlineCheckbox2"
+                                        value="Relaxing" name="activities" />
+                                    <label class="form-check-label" for="inlineCheckbox3">Relaxing</label>
+                                </div>
+
+                                <div class="form-check form-check-inline col align-items-start">
+                                    <input class="form-check-input" type="checkbox" id="inlineCheckbox1"
+                                        value="Romantic" name="activities" />
+                                    <label class="form-check-label" for="inlineCheckbox4">Romantic</label>
+                                </div>
+
+                                <div class="form-check form-check-inline col align-items-start">
+                                    <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="Beaches"
+                                        name="activities" />
+                                    <label class="form-check-label" for="inlineCheckbox5">Beaches</label>
+                                </div>
+
+                                <div class="form-check form-check-inline col align-items-start">
+                                    <input class="form-check-input" type="checkbox" id="inlineCheckbox2"
+                                        value="Shopping" name="activities" />
+                                    <label class="form-check-label" for="inlineCheckbox6">Shopping</label>
+                                </div>
+
+                                <div class="form-check form-check-inline col align-items-start">
+                                    <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="Museums"
+                                        name="activities" />
+                                    <label class="form-check-label" for="inlineCheckbox7">Museums</label>
+                                </div>
+
+                                <div class="form-check form-check-inline col align-items-start">
+                                    <input class="form-check-input" type="checkbox" id="inlineCheckbox2"
+                                        value="Historical" name="activities" />
+                                    <label class="form-check-label" for="inlineCheckbox8">Historical</label>
+                                </div>
+
+                                <div class="form-check form-check-inline col align-items-start">
+                                    <input class="form-check-input" type="checkbox" id="inlineCheckbox2"
+                                        value="Wildlife" name="activities" />
+                                    <label class="form-check-label" for="inlineCheckbox9">Wildlife</label>
                                 </div>
                             </div>
 
-                            <div class="col align-items-start">
-                                <div class="form-floating mb-3">
-                                    <input type="date" class="form-control rounded-3" id="floatingEndDate"
-                                        placeholder="Singapore">
-                                    <label for="floatingInput">End Date</label>
-                                </div>
-                            </div>
-
-                        </div>
-                        <hr class="my-4">
-                        <h5>Activites & Preferences (optional)
-                        </h5>
-                        <div id="activites-and-preferences" class="row">
-                            <div class="form-check form-check-inline col align-items-start">
-                                <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1" />
-                                <label class="form-check-label" for="inlineCheckbox1">Culture</label>
-                            </div>
-
-                            <div class="form-check form-check-inline col align-items-start">
-                                <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2" />
-                                <label class="form-check-label" for="inlineCheckbox2">Outdoors</label>
-                            </div>
-
-                            <div class="form-check form-check-inline col align-items-start">
-                                <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2" />
-                                <label class="form-check-label" for="inlineCheckbox3">Relaxing</label>
-                            </div>
-
-                            <div class="form-check form-check-inline col align-items-start">
-                                <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1" />
-                                <label class="form-check-label" for="inlineCheckbox4">Romantic</label>
-                            </div>
-
-                            <div class="form-check form-check-inline col align-items-start">
-                                <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2" />
-                                <label class="form-check-label" for="inlineCheckbox5">Beaches</label>
-                            </div>
-
-                            <div class="form-check form-check-inline col align-items-start">
-                                <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2" />
-                                <label class="form-check-label" for="inlineCheckbox6">Shopping</label>
-                            </div>
-
-                            <div class="form-check form-check-inline col align-items-start">
-                                <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1" />
-                                <label class="form-check-label" for="inlineCheckbox7">Museums</label>
-                            </div>
-
-                            <div class="form-check form-check-inline col align-items-start">
-                                <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2" />
-                                <label class="form-check-label" for="inlineCheckbox8">Historical</label>
-                            </div>
-
-                            <div class="form-check form-check-inline col align-items-start">
-                                <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2" />
-                                <label class="form-check-label" for="inlineCheckbox9">Wildlife</label>
-                            </div>
-                        </div>
-
-                        <hr class="my-4">
-                        <button class="w-100 py-2 mb-2 btn btn-outline-dark rounded-3" type="submit">
-                            See Your Trip Plan
-                        </button>
-                    </form>
+                            <hr class="my-4">
+                            <button href="/username/countryname" class="w-100 py-2 mb-2 btn btn-outline-dark rounded-3"
+                                type="submit">
+                                See Your Trip Plan
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </form>
 
     <%- include("partials/footer"); -%>

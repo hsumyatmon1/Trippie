@@ -1,0 +1,29 @@
+<%- include("partials/header"); -%>
+    <div class="modal modal-planner position-static d-block" tabindex="-1" role="dialog" id="modalPlanner">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content rounded-4 shadow">
+                <div class="modal-header p-5 pb-4 border-bottom-0">
+                    <!-- <h5 class="modal-title">Modal title</h5> -->
+                    <h2 class="fw-bold mb-0">Where do you wanna go?!</h2>
+                    <a type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" href="/"></a>
+                </div>
+
+                <div class="modal-body p-5 pt-0">
+                    <form class="" action="/whereto" method="post">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control rounded-3" id="whereto" name="whereto"
+                                placeholder="Countries, Cities, Places, Attractions,..." required>
+                            <label for="whereto">Countries, Cities, Places, Attractions,...</label>
+                        </div>
+
+                        <hr class="my-4">
+                        <button class="w-100 py-2 mb-2 btn btn-outline-dark rounded-3" type="submit">
+                            Get Services
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%- include("partials/footer"); -%>

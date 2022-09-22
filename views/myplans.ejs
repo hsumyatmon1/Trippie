@@ -1,26 +1,56 @@
 <%- include("partials/header"); -%>
 
     <!-- No Plans -->
-    <div class="px-4 py-5 my-5 text-center" id="noPlans">
-        <i class="fa-regular fa-face-frown fa-4x my-2"></i>
-        <h1 class="display-5 fw-bold">There are no plans yet.</h1>
-        <div class="col-lg-6 mx-auto">
-            <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-                <a href="/planner" class="btn btn-dark my-2" data-toggle="modal" data-target="#myModal">Start
-                    Planning</a>
-                <a href="/" class="btn btn-outline-dark my-2"><i class="fa-solid fa-house-chimney"></i>
-                    Home</a>
-                <a href="/services" class="btn btn-outline-primary my-2"><i class="fa fa-th"></i>
-                    Services</a>
-                <a href="/favourites" class="btn btn-outline-danger my-2"><i class="fa fa-heart"></i>
-                    Favourites</a>
-            </div>
-        </div>
+    <div class="px-4 my-2 text-center" id="noPlans">
+        <% if(foundPlans.length===0) { %>
+            <i class="fa-regular fa-face-frown fa-4x my-2"></i>
+            <h1 class="display-5 fw-bold">There are no plans yet.</h1>
+            <% } else {%>
+                <i class="fa-regular fa-face-smile fa-4x my-2"></i>
+                <h1 class="display-5 fw-bold">Seems like you have a lot of things going on!</h1>
+                <%}; %>
+
+                    <div class="col-lg-6 mx-auto">
+                        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                            <a href="/planner" class="btn btn-dark my-2" data-toggle="modal"
+                                data-target="#myModal">Start
+                                Planning</a>
+                            <a href="/" class="btn btn-outline-dark my-2"><i class="fa-solid fa-house-chimney"></i>
+                                Home</a>
+                            <a href="/whereto" class="btn btn-outline-primary my-2"><i class="fa fa-th"></i>
+                                Services</a>
+                            <a href="/favourites" class="btn btn-outline-danger my-2"><i class="fa fa-heart"></i>
+                                Favourites</a>
+                        </div>
+                    </div>
     </div>
 
     <!-- Start Planning -->
-
-
-
-
-    <%- include("partials/footer"); -%>
+    <div class="album mb-4" id="listServices">
+        <div class="container">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 g-3">
+                <!-- My Plans -->
+                <% foundPlans.forEach((plan, i)=> { %>
+                    <div class="col">
+                        <a href="/myplans/<%=plan._id%>">
+                            <div class="card shadow-sm">
+                                <img src="Images/myplans.jpg">
+                                <div class="card-body">
+                                    <h6 class="card-title placeholder-glow">
+                                        <span class="placeholder col-6">
+                                            <%=plan.destination%>
+                                        </span>
+                                    </h6>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <small class="text-muted">
+                                            <%=plan.startDate%> to <%=plan.endDate%>
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <% }); %>
+            </div>
+        </div>
+    </div>
