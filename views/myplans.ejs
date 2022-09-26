@@ -1,7 +1,7 @@
 <%- include("partials/header"); -%>
 
     <!-- No Plans -->
-    <div class="px-4 my-2 text-center" id="noPlans">
+    <div class="px-4 my-2 mb-4 text-center" id="noPlans">
         <% if(foundPlans.length===0) { %>
             <i class="fa-regular fa-face-frown fa-4x my-2"></i>
             <h1 class="display-5 fw-bold">There are no plans yet.</h1>
@@ -9,20 +9,6 @@
                 <i class="fa-regular fa-face-smile fa-4x my-2"></i>
                 <h1 class="display-5 fw-bold">Seems like you have a lot of things going on!</h1>
                 <%}; %>
-
-                    <div class="col-lg-6 mx-auto">
-                        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-                            <a href="/planner" class="btn btn-dark my-2" data-toggle="modal"
-                                data-target="#myModal">Start
-                                Planning</a>
-                            <a href="/" class="btn btn-outline-dark my-2"><i class="fa-solid fa-house-chimney"></i>
-                                Home</a>
-                            <a href="/whereto" class="btn btn-outline-primary my-2"><i class="fa fa-th"></i>
-                                Services</a>
-                            <a href="/favourites" class="btn btn-outline-danger my-2"><i class="fa fa-heart"></i>
-                                Favourites</a>
-                        </div>
-                    </div>
     </div>
 
     <!-- Start Planning -->
@@ -54,3 +40,4 @@
             </div>
         </div>
     </div>
+    <%- include("partials/footer"); -%>

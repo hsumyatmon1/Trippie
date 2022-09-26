@@ -10,12 +10,7 @@ const passportLocalMongoose = require("passport-local-mongoose");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const FacebookStrategy = require("passport-facebook");
 const findOrCreate = require("mongoose-findorcreate");
-const axios = require("axios");
 const http = require("https");
-const mailchimp = require("@mailchimp/mailchimp_marketing");
-
-global.locationID;
-global.whereto;
 
 const app = express();
 
@@ -42,14 +37,28 @@ mongoose.connect("mongodb://localhost:27017/Trippie", () => {
     console.log("MongoDB connected");
 });
 
+app.use(function (req, res, next) {
+    res.locals.isAuthenticated = req.isAuthenticated();
+    next();
+});
+
+const itemSchema = new mongoose.Schema({
+    name: String,
+    url: String,
+});
+
 const tripplanSchema = new mongoose.Schema({
+    userID: String,
     destination: String,
+    locationID: Number,
     startDate: String,
     endDate: String,
     adult: Number,
     children: Number,
     currency: String,
     activities: Array,
+    checklistdefault: [itemSchema],
+    checklistdynamic: [itemSchema],
 });
 
 const userSchema = new mongoose.Schema({
@@ -58,14 +67,52 @@ const userSchema = new mongoose.Schema({
     password: String,
     googleId: String,
     facebookId: String,
-    plannedTrips: [tripplanSchema],
 });
 
 userSchema.plugin(passportLocalMongoose);
 userSchema.plugin(findOrCreate);
 
+const Item = new mongoose.model("Item", itemSchema);
 const PlannedTrip = new mongoose.model("Planned_Trip", tripplanSchema);
 const User = new mongoose.model("User", userSchema);
+
+const item1 = new Item({
+    name: "Check Visa Information",
+    url: "https://www.ivisa.com/",
+});
+
+const item2 = new Item({
+    name: "Check Covid Information",
+    url: "https://www.booking.com/covid-19.html",
+});
+
+const item3 = new Item({
+    name: "Buy Travel Insurance",
+    url: "https://www.worldnomads.com/",
+});
+
+const item4 = new Item({
+    name: "Book Flights",
+    url: "https://www.tripadvisor.com/Flights-g",
+});
+
+const item5 = new Item({
+    name: "Book Accomodation",
+    url: "https://www.tripadvisor.com/Hotels-g",
+});
+
+const item6 = new Item({
+    name: "Check Out The Places To Visit",
+    url: "https://www.tripadvisor.com/Attractions-g",
+});
+
+const item7 = new Item({
+    name: "Check Out The Restaurants Recommendations",
+    url: "https://www.tripadvisor.com/Restaurants-g",
+});
+
+const defaultItems = [item1, item2, item3];
+const dynamicItems = [item4, item5, item6, item7];
 
 passport.use(User.createStrategy());
 
@@ -112,7 +159,6 @@ passport.use(
             callbackURL: "http://localhost:3000/auth/facebook/callback",
         },
         function (accessToken, refreshToken, profile, cb) {
-            console.log(profile);
             User.findOrCreate(
                 {
                     facebookId: profile.id,
@@ -139,7 +185,7 @@ app.get(
     "/auth/google/myplans",
     passport.authenticate("google", { failureRedirect: "/signin" }),
     function (req, res) {
-        // Successful authentication, redirect to secrets.
+        // Successful authentication, redirect to myplans.
         res.redirect("/myplans");
     }
 );
@@ -154,69 +200,105 @@ app.get(
     "/auth/facebook/callback",
     passport.authenticate("facebook", { failureRedirect: "/signin" }),
     function (req, res) {
-        // Successful authentication, redirect home.
+        // Successful authentication, redirect to myplans.
         res.redirect("/myplans");
     }
 );
-
-app.get("/destinations", function (req, res) {
-    res.render("destinations");
-});
 
 app.get("/FAQs", function (req, res) {
     res.render("FAQs");
 });
 
-app.get("/favourites", function (req, res) {
-    res.render("favourites");
-});
-
 app.get("/myplans", function (req, res) {
-    PlannedTrip.find({}, function (err, foundPlans) {
-        if (!err) {
-            res.render("myplans", { foundPlans: foundPlans });
-        } else {
-            res.send(err);
-        }
-    });
+    if (req.isAuthenticated()) {
+        PlannedTrip.find({ userID: req.user.id }, function (err, foundPlans) {
+            if (!err) {
+                res.render("myplans", { foundPlans: foundPlans });
+            } else {
+                res.send(err);
+            }
+        });
+    } else {
+        res.render("myplans", { foundPlans: [] });
+    }
 });
 
 app.get("/myplans/:planID", function (req, res) {
-    const requestedID = req.params.planID;
-    console.log(requestedID);
-
-    PlannedTrip.findOne({ _id: requestedID }, function (err, foundID) {
+    PlannedTrip.findOne({ _id: req.params.planID }, function (err, foundID) {
         res.render("plan", { foundID: foundID });
     });
 });
 
+app.delete("/myplans/:planID", function (req, res) {
+    PlannedTrip.deleteOne({ _id: req.params.planID }, function (err) {
+        console.log("The plan has been deleted.");
+        res.redirect("/myplans");
+    });
+});
+
+app.post("/checkeddefaultitemdelete", function (req, res) {
+    const checkedItemID = req.body.currentCheckbox;
+    const checkedPlanID = req.body.checkedPlanID;
+
+    PlannedTrip.findOneAndUpdate(
+        { _id: checkedPlanID },
+        { $pull: { checklistdefault: { _id: checkedItemID } } },
+        function (err, foundList) {
+            if (!err) {
+                console.log("Successfully removed.");
+                res.redirect("/myplans/" + checkedPlanID);
+            }
+        }
+    );
+});
+
+app.post("/checkeddynamicitemdelete", function (req, res) {
+    const checkedItemID = req.body.currentCheckbox;
+    const checkedPlanID = req.body.checkedPlanID;
+
+    PlannedTrip.findOneAndUpdate(
+        { _id: checkedPlanID },
+        { $pull: { checklistdynamic: { _id: checkedItemID } } },
+        function (err, foundList) {
+            if (!err) {
+                console.log("Successfully removed.");
+                res.redirect("/myplans/" + checkedPlanID);
+            }
+        }
+    );
+});
+
 app.get("/planner", function (req, res) {
-    res.render("planner");
+    if (req.isAuthenticated()) {
+        res.render("planner");
+    } else {
+        res.redirect("/signin");
+    }
 });
 
 app.post("/planner", function (req, res) {
-    // req.params.destination = req.body.destination;
-    // const filter = { _id: req.user.id };
-
     const startDate = req.body.startDate.toString();
     const endDate = req.body.endDate.toString();
+    const destination = encodeURIComponent(req.body.destination);
+
+    console.log(req.user.id);
 
     const newPlan = new PlannedTrip({
+        userID: req.user.id,
         destination: req.body.destination,
+        locationID: 294265,
         startDate: startDate.slice(0, 10),
         endDate: endDate.slice(0, 10),
         adult: req.body.adult,
         children: req.body.children,
         currency: req.body.currency,
         activities: req.body.activities,
+        checklistdefault: defaultItems,
+        checklistdynamic: dynamicItems,
     });
 
-    // const update = { plannedTrips: newPlan };
-
-    // const doc = User.findOneAndUpdate(filter, update);
-    // console.log(doc);
     newPlan.save();
-    // User.save();
+
     res.redirect("/myplans");
 });
 
@@ -226,8 +308,76 @@ app.get("/whereto", function (req, res) {
 
 app.post("/whereto", function (req, res) {
     const whereto = encodeURIComponent(req.body.whereto);
-    global.whereto = whereto;
-    const http = require("https");
+    res.locals.whereto = whereto;
+    res.locals.locationID = 294265;
+    console.log("res.locals.locationID = " + res.locals.locationID);
+    res.redirect("/services");
+});
+
+app.get("/services", function (req, res) {
+    res.render("services");
+});
+
+app.get("/services/bookflights", function (req, res) {
+    console.log(
+        "res.locals.locationID in book flights = " + res.locals.locationID
+    );
+    url = "https://www.tripadvisor.com/Flights-g" + res.locals.locationID;
+    res.redirect(url);
+});
+
+app.get("/services/book-accomodation", function (req, res) {
+    console.log(
+        "res.locals.locationID in book accomodation = " + res.locals.locationID
+    );
+
+    url = "https://www.tripadvisor.com/Hotels-g" + res.locals.locationID;
+    res.redirect(url);
+});
+
+app.get("/services/tour-guide", function (req, res) {
+    console.log("res.locals.whereto in tour guides = " + res.locals.whereto);
+
+    tab = "tour_guides";
+    url =
+        "https://www.tourhq.com/" +
+        res.locals.whereto +
+        "-tours-guide?tab=" +
+        tab;
+    res.redirect(url);
+});
+
+app.get("/services/things-to-do", function (req, res) {
+    console.log(
+        "res.locals.locationID in things to do = " + res.locals.locationID
+    );
+
+    url = "https://www.tripadvisor.com/Attractions-g" + res.locals.locationID;
+    res.redirect(url);
+});
+
+app.get("/services/restaurants-recommendations", function (req, res) {
+    console.log("res.locals.locationID in rr = " + res.locals.locationID);
+
+    url = "https://www.tripadvisor.com/Restaurants-g" + res.locals.locationID;
+    res.redirect(url);
+});
+
+app.get("/signin", function (req, res) {
+    res.render("signin");
+});
+
+app.post("/logout", function (req, res, next) {
+    req.logout(function (err) {
+        if (err) {
+            return next(err);
+        }
+        res.redirect("/");
+    });
+});
+
+function getLocationID(whereto) {
+    let id = 0;
 
     const options = {
         method: "GET",
@@ -256,66 +406,17 @@ app.post("/whereto", function (req, res) {
             const body = Buffer.concat(chunks);
             const stringData = body.toString();
             const jsData = JSON.parse(stringData);
-            console.log(jsData);
-            const locationId =
+            const locationID =
                 jsData.data.Typeahead_autocomplete.results[0].detailsV2
                     .locationId;
-            global.locationID = locationId;
-            console.log("The user chose to go " + global.locationID);
+            id = locationID;
+            console.log("The user chose to go " + id);
+            return id;
         });
     });
 
     request.end();
-    res.redirect("/services");
-});
-
-app.get("/services", function (req, res) {
-    res.render("services");
-});
-
-app.get("/services/bookflights", function (req, res) {
-    url = "https://www.tripadvisor.com/Flights-g" + global.locationID;
-    res.redirect(url);
-});
-
-app.get("/services/book-accomodation", function (req, res) {
-    url = "https://www.tripadvisor.com/Hotels-g" + global.locationID;
-    res.redirect(url);
-});
-
-app.get("/services/covid-information", function (req, res) {
-    url = abc;
-    res.redirect(url);
-});
-
-app.get("/services/tour-guide", function (req, res) {
-    tab = "tour_guides";
-    url = "https://www.tourhq.com/" + whereto + "-tours-guide?tab=" + tab;
-    res.redirect(url);
-});
-
-app.get("/services/things-to-do", function (req, res) {
-    url = "https://www.tripadvisor.com/Attractions-g" + global.locationID;
-    res.redirect(url);
-});
-
-app.get("/services/restaurants-recommendations", function (req, res) {
-    url = "https://www.tripadvisor.com/Restaurants-g" + global.locationID;
-    res.redirect(url);
-});
-
-app.get("/signin", function (req, res) {
-    res.render("signin");
-});
-
-app.post("/logout", function (req, res, next) {
-    req.logout(function (err) {
-        if (err) {
-            return next(err);
-        }
-        res.redirect("/");
-    });
-});
+}
 
 app.listen(3000, function () {
     console.log("Server started on port 3000");

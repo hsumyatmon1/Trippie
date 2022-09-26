@@ -1,49 +1,69 @@
 <%- include("partials/header"); -%>
 
-    <section class="hero">
-        <header id="header">
-            <a id="logo" href="#">logo</a>
-            <nav>
-                <a id="menu-icon">&#8801;</a>
-            </nav>
-        </header>
-        <header class="hero-header">
-            <h1 class="hero-title">A Trip to <%=foundID.destination%> from <%=foundID.startDate%> to
-                        <%=foundID.endDate%>.
-            </h1>
-        </header>
-        <footer class="hero-footer">
-            <a class="button button-primary" href="#">button one</a>
-            <a class="button" href="#">button two</a>
-        </footer>
-    </section>
-    <article>
-        <h2>Some additional content</h2>
-        <p>The rest of the page content continues below the hero. You can use the hero at the top of your page, e.g. the
-            home page. A hero is great to display a high quality picture together with tasty title.</p>
-        <p>Ad donec tincidunt torquent ultricies convallis sodales faucibus magna, fringilla lorem blandit sollicitudin
-            donec faucibus curae orci molestie, et proin curae aliquet venenatis ligula amet vivamus orci varius arcu.
-        </p>
-        <p>Laoreet fusce condimentum venenatis quisque imperdiet ornare cras faucibus convallis, pharetra habitasse
-            elementum ut bibendum per sociosqu phasellus etiam, velit faucibus integer torquent leo elementum maecenas
-            netus.</p>
-    </article>
-    <h3 class="display-5 fw-bold">Seems like you have a lot of things going on!</h1>
-        <div class="timeline">
-            <div class="container left">
-                <div class="content">
-                    <h2>
-                        <%=foundID.destination%>
-                    </h2>
-                    <p>Lorem ipsum..</p>
-                </div>
-            </div>
-            <div class="container right">
-                <div class="content">
-                    <h2>2016</h2>
-                    <p>Lorem ipsum..</p>
-                </div>
-            </div>
+    <div class="row">
+        <div class="col-md-6 hero">
+            <header id="header">
+            </header>
+            <header class="hero-header">
+                <h1 class="hero-title mb-4">A Trip To <%=foundID.destination%>
+                </h1>
+                <h3 class="m-0">from <%=foundID.startDate%>
+                </h3>
+                <h3 class="m-0">to <%=foundID.endDate%>
+                </h3>
+            </header>
+            <footer class="hero-footer">
+                <a class="btn btn-light" href="/planner">Create a new plan</a>
+                <form method="POST" action="/myplans/<%= foundID.id %>?_method=DELETE">
+                    <button class="btn btn-outline-light" type="submit">Delete this plan</button>
+                </form>
+            </footer>
         </div>
-        <!-- Footer -->
+
+        <div class="col-md-6" id="todolistcheck">
+            <h2 class="checklist-title text-center mb-4">Trip Checklist</h2>
+            <ol class="gradient-list">
+                <% foundID.checklistdefault.forEach((item, i)=> { %>
+                    <li>
+                        <form action="/checkeddefaultitemdelete" method="post">
+                            <input type="checkbox" name="currentCheckbox" value="<%=item._id%>"
+                                onchange="this.form.submit()">
+                            </input>
+                            <label>
+                                <a href="<%=item.url%>">
+                                    <%= item.name %>
+                                </a>
+                            </label>
+                            <input type="hidden" name="checkedPlanID" value="<%= foundID.id%>"></input>
+                        </form>
+                    </li>
+                    <% }); %>
+
+                        <% foundID.checklistdynamic.forEach((item, i)=> { %>
+                            <li>
+                                <form action="/checkeddynamicitemdelete" method="post">
+                                    <input type="checkbox" name="currentCheckbox" value="<%=item._id%>"
+                                        onchange="this.form.submit()">
+                                    </input>
+                                    <label>
+                                        <a href="<%=item.url%><%=foundID.locationID%>">
+                                            <%= item.name %>
+                                        </a>
+                                    </label>
+                                    <input type="hidden" name="checkedPlanID" value="<%= foundID.id%>"></input>
+                                </form>
+                            </li>
+                            <% }); %>
+
+            </ol>
+
+            <% if(foundID.checklistdefault.length===0 && foundID.checklistdynamic.lenght===0) { %>
+                <div class="px-4 my-2 text-center goodygoody">
+                    <i class="fa-regular fa-face-smile fa-4x my-2"></i>
+                    <h3 class="display-5 fw-bold">You are good to go!</h3>
+                </div>
+                <% } %>
+        </div>
+
+
         <%- include("partials/footer"); -%>

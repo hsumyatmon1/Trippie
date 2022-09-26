@@ -12,7 +12,6 @@
                     <div id="mc_embed_signup_scroll">
                         <h2>Subscribe Our Newsletter</h2>
                         <div class="mc-field-group">
-                            <div class="indicates-required"><span class="asterisk">*</span> indicates required</div>
                             <label for="mce-EMAIL">Email Address <span class="asterisk">*</span>
                             </label>
                             <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL" required>
@@ -52,7 +51,56 @@
 <script src=" https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
     </script>
-<script src="script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<script>
+    function startDateValidation() {
+        console.log(document.getElementById("floatingStartDate").value);
+        var today = new Date();
+        var thisyear = today.getFullYear();
+        var thismonth = today.getMonth() + 1;
+        var thisdate = today.getDate();
+        if (thismonth < 10) {
+            thismonth = "0" + thismonth;
+        }
+
+        if (thisdate < 10) {
+            thisdate = "0" + thisdate;
+        }
+
+        var firstValidDate = thisyear + "-" + thismonth + "-" + thisdate;
+        console.log(firstValidDate);
+        document.getElementById("floatingStartDate").min = firstValidDate;
+        document.getElementById("floatingEndDate").min = firstValidDate;
+    }
+
+    function endDateValidation() {
+        var chosenStartDate = document.getElementById("floatingStartDate").value;
+        document.getElementById("floatingEndDate").min = chosenStartDate;
+        var startDate = new Date(chosenStartDate);
+        console.log("Chosen Date = " + chosenStartDate);
+        console.log("Start Date = " + startDate);
+        var lastValidDate = new Date();
+        lastValidDate.setDate(startDate.getDate() + 30)
+
+        var lastvalidyear = lastValidDate.getFullYear();
+        var lastvalidmonth = lastValidDate.getMonth() + 1;
+        var lastvaliddate = lastValidDate.getDate();
+        if (lastvalidmonth < 10) {
+            lastvalidmonth = "0" + lastvalidmonth;
+        }
+
+        if (lastvaliddate < 10) {
+            lastvaliddate = "0" + lastvaliddate;
+        }
+
+        var lastValidDate = lastvalidyear + "-" + lastvalidmonth + "-" + lastvaliddate;
+        console.log("Last Valid Date = " + lastValidDate);
+        document.getElementById("floatingEndDate").max = lastValidDate;
+
+
+    }
+</script>
 
 </body>
 

@@ -13,7 +13,7 @@
                         <form class="" action="/planner" method="post">
                             <div class="form-floating mb-3">
                                 <input type="text" class="form-control rounded-3" id="floatingInput"
-                                    placeholder="Singapore" name="destination" required>
+                                    placeholder="Singapore" minlength="4" name="destination" required>
                                 <label for="floatingInput">Destination</label>
                             </div>
                             <div class="row">
@@ -42,9 +42,8 @@
                                 <div class="col align-items-start">
                                     <div class="form-floating mb-3">
                                         <input type="date" class="form-control rounded-3 bfh-datepicker"
-                                            data-min="today" data-close="false" id="floatingStartDate"
-                                            placeholder="Start Date" name="startDate" min-date="today" required
-                                            value="today">
+                                            data-close="false" id="floatingStartDate" placeholder="Start Date"
+                                            onclick="startDateValidation()" name="startDate" required>
                                         <label for="floatingStartDate">Start Date</label>
                                     </div>
                                 </div>
@@ -52,12 +51,11 @@
                                 <div class="col align-items-start">
                                     <div class="form-floating mb-3">
                                         <input type="date" class="form-control rounded-3 bfh-datepicker"
-                                            data-min="today" data-close="false" id="floatingEndDate"
-                                            placeholder="End Date" name="endDate" min-date="" required>
+                                            data-close="false" id="floatingEndDate" placeholder="End Date"
+                                            onclick="endDateValidation()" name="endDate" required>
                                         <label for="floatingEndDate">End Date</label>
                                     </div>
                                 </div>
-
                             </div>
                             <hr class="my-4">
                             <h5>Activites & Preferences (optional)
@@ -119,8 +117,7 @@
                             </div>
 
                             <hr class="my-4">
-                            <button href="/username/countryname" class="w-100 py-2 mb-2 btn btn-outline-dark rounded-3"
-                                type="submit">
+                            <button class="w-100 py-2 mb-2 btn btn-outline-dark rounded-3" type="submit" ">
                                 See Your Trip Plan
                             </button>
                         </form>
