@@ -137,7 +137,8 @@ passport.use(
         {
             clientID: process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-            callbackURL: "http://localhost:3000/auth/google/myplans",
+            callbackURL:
+                "https://young-bayou-18229.herokuapp.com/auth/google/myplans",
             userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
         },
         function (accessToken, refreshToken, profile, cb) {
@@ -162,7 +163,8 @@ passport.use(
         {
             clientID: process.env.FACEBOOK_APP_ID,
             clientSecret: process.env.FACEBOOK_APP_SECRET,
-            callbackURL: "http://localhost:3000/auth/facebook/callback",
+            callbackURL:
+                "https://young-bayou-18229.herokuapp.com/auth/facebook/callback",
         },
         function (accessToken, refreshToken, profile, cb) {
             User.findOrCreate(
