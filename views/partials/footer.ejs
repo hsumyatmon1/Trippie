@@ -54,8 +54,7 @@
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 <script>
-    function startDateValidation() {
-        console.log(document.getElementById("floatingStartDate").value);
+    function getTodayDate() {
         var today = new Date();
         var thisyear = today.getFullYear();
         var thismonth = today.getMonth() + 1;
@@ -63,42 +62,71 @@
         if (thismonth < 10) {
             thismonth = "0" + thismonth;
         }
-
         if (thisdate < 10) {
             thisdate = "0" + thisdate;
         }
-
         var firstValidDate = thisyear + "-" + thismonth + "-" + thisdate;
         console.log(firstValidDate);
         document.getElementById("floatingStartDate").min = firstValidDate;
         document.getElementById("floatingEndDate").min = firstValidDate;
     }
 
+    function startDateValidation() {
+        console.log("Start Date Validation Begins");
+        var chosenEndDate = document.getElementById("floatingEndDate").value;
+        console.log("Chosen End Date: " + chosenEndDate);
+        if (chosenEndDate === "" || chosenEndDate === null) {
+            getTodayDate();
+        } else {
+            document.getElementById("floatingStartDate").min = chosenEndDate;
+            var endDate = new Date(chosenEndDate);
+            console.log("Chosen Date = " + chosenEndDate);
+            console.log("End Date = " + endDate);
+            var firstvalidyear = endDate.getFullYear();
+            var firstvalidmonth = endDate.getMonth();
+            var firstvaliddate = endDate.getDate();
+            if (firstvalidmonth < 10) {
+                firstvalidmonth = "0" + firstvalidmonth;
+            }
+            if (firstvaliddate < 10) {
+                firstvaliddate = "0" + firstvaliddate;
+            }
+            var firstValidDate =
+                firstvalidyear + "-" + firstvalidmonth + "-" + firstvaliddate;
+            console.log("First Valid Date = " + firstValidDate);
+            document.getElementById("floatingStartDate").min = firstValidDate;
+        }
+    }
+
     function endDateValidation() {
+        console.log("End date validation begins");
         var chosenStartDate = document.getElementById("floatingStartDate").value;
-        document.getElementById("floatingEndDate").min = chosenStartDate;
-        var startDate = new Date(chosenStartDate);
-        console.log("Chosen Date = " + chosenStartDate);
-        console.log("Start Date = " + startDate);
-        var lastValidDate = new Date();
-        lastValidDate.setDate(startDate.getDate() + 30)
-
-        var lastvalidyear = lastValidDate.getFullYear();
-        var lastvalidmonth = lastValidDate.getMonth() + 1;
-        var lastvaliddate = lastValidDate.getDate();
-        if (lastvalidmonth < 10) {
-            lastvalidmonth = "0" + lastvalidmonth;
+        console.log("Chosen Start Date Value: " + chosenStartDate);
+        if (chosenStartDate === "" || chosenStartDate === null) {
+            getTodayDate();
+        } else {
+            document.getElementById("floatingEndDate").min = chosenStartDate;
+            var startDate = new Date(chosenStartDate);
+            console.log("Chosen Date = " + chosenStartDate);
+            console.log("Start Date = " + startDate);
+            var lastvalidyear = startDate.getFullYear();
+            var lastvalidmonth = startDate.getMonth() + 2;
+            var lastvaliddate = startDate.getDate();
+            if (lastvalidmonth < 10) {
+                lastvalidmonth = "0" + lastvalidmonth;
+            }
+            if (lastvaliddate < 10) {
+                lastvaliddate = "0" + lastvaliddate;
+            }
+            var lastValidDate =
+                lastvalidyear + "-" + lastvalidmonth + "-" + lastvaliddate;
+            console.log("Last Valid Date = " + lastValidDate);
+            document.getElementById("floatingEndDate").max = lastValidDate;
         }
+    }
 
-        if (lastvaliddate < 10) {
-            lastvaliddate = "0" + lastvaliddate;
-        }
-
-        var lastValidDate = lastvalidyear + "-" + lastvalidmonth + "-" + lastvaliddate;
-        console.log("Last Valid Date = " + lastValidDate);
-        document.getElementById("floatingEndDate").max = lastValidDate;
-
-
+    function reset() {
+        document.getElementById("planner").reset();
     }
 </script>
 

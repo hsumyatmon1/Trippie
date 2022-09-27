@@ -14,7 +14,7 @@
             </header>
             <footer class="hero-footer">
                 <a class="btn btn-light" href="/planner">Create a new plan</a>
-                <form method="POST" action="/myplans/<%= foundID.id %>?_method=DELETE">
+                <form method="POST" action="/myplans/<%= foundID.id %>/delete">
                     <button class="btn btn-outline-light" type="submit">Delete this plan</button>
                 </form>
             </footer>

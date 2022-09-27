@@ -33,9 +33,12 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-mongoose.connect("mongodb://localhost:27017/Trippie", () => {
-    console.log("MongoDB connected");
-});
+mongoose.connect(
+    "mongodb+srv://" + process.env.MongoDBconnect + "/Trippie",
+    () => {
+        console.log("MongoDB connected");
+    }
+);
 
 app.use(function (req, res, next) {
     res.locals.isAuthenticated = req.isAuthenticated();
@@ -113,6 +116,9 @@ const item7 = new Item({
 
 const defaultItems = [item1, item2, item3];
 const dynamicItems = [item4, item5, item6, item7];
+
+global.locationID;
+global.whereto;
 
 passport.use(User.createStrategy());
 
@@ -229,7 +235,7 @@ app.get("/myplans/:planID", function (req, res) {
     });
 });
 
-app.delete("/myplans/:planID", function (req, res) {
+app.post("/myplans/:planID/delete", function (req, res) {
     PlannedTrip.deleteOne({ _id: req.params.planID }, function (err) {
         console.log("The plan has been deleted.");
         res.redirect("/myplans");
@@ -281,116 +287,17 @@ app.post("/planner", function (req, res) {
     const endDate = req.body.endDate.toString();
     const destination = encodeURIComponent(req.body.destination);
 
-    console.log(req.user.id);
-
-    const newPlan = new PlannedTrip({
-        userID: req.user.id,
-        destination: req.body.destination,
-        locationID: 294265,
-        startDate: startDate.slice(0, 10),
-        endDate: endDate.slice(0, 10),
-        adult: req.body.adult,
-        children: req.body.children,
-        currency: req.body.currency,
-        activities: req.body.activities,
-        checklistdefault: defaultItems,
-        checklistdynamic: dynamicItems,
-    });
-
-    newPlan.save();
-
-    res.redirect("/myplans");
-});
-
-app.get("/whereto", function (req, res) {
-    res.render("whereto");
-});
-
-app.post("/whereto", function (req, res) {
-    const whereto = encodeURIComponent(req.body.whereto);
-    res.locals.whereto = whereto;
-    res.locals.locationID = 294265;
-    console.log("res.locals.locationID = " + res.locals.locationID);
-    res.redirect("/services");
-});
-
-app.get("/services", function (req, res) {
-    res.render("services");
-});
-
-app.get("/services/bookflights", function (req, res) {
-    console.log(
-        "res.locals.locationID in book flights = " + res.locals.locationID
-    );
-    url = "https://www.tripadvisor.com/Flights-g" + res.locals.locationID;
-    res.redirect(url);
-});
-
-app.get("/services/book-accomodation", function (req, res) {
-    console.log(
-        "res.locals.locationID in book accomodation = " + res.locals.locationID
-    );
-
-    url = "https://www.tripadvisor.com/Hotels-g" + res.locals.locationID;
-    res.redirect(url);
-});
-
-app.get("/services/tour-guide", function (req, res) {
-    console.log("res.locals.whereto in tour guides = " + res.locals.whereto);
-
-    tab = "tour_guides";
-    url =
-        "https://www.tourhq.com/" +
-        res.locals.whereto +
-        "-tours-guide?tab=" +
-        tab;
-    res.redirect(url);
-});
-
-app.get("/services/things-to-do", function (req, res) {
-    console.log(
-        "res.locals.locationID in things to do = " + res.locals.locationID
-    );
-
-    url = "https://www.tripadvisor.com/Attractions-g" + res.locals.locationID;
-    res.redirect(url);
-});
-
-app.get("/services/restaurants-recommendations", function (req, res) {
-    console.log("res.locals.locationID in rr = " + res.locals.locationID);
-
-    url = "https://www.tripadvisor.com/Restaurants-g" + res.locals.locationID;
-    res.redirect(url);
-});
-
-app.get("/signin", function (req, res) {
-    res.render("signin");
-});
-
-app.post("/logout", function (req, res, next) {
-    req.logout(function (err) {
-        if (err) {
-            return next(err);
-        }
-        res.redirect("/");
-    });
-});
-
-function getLocationID(whereto) {
-    let id = 0;
-
     const options = {
         method: "GET",
         hostname: "travel-advisor.p.rapidapi.com",
         port: null,
         path:
             "/locations/v2/auto-complete?query=" +
-            whereto +
+            destination +
             "&lang=en_US&units=km",
         headers: {
-            "X-RapidAPI-Key":
-                "e0f666ff90mshe64fdb0fdf00c55p18c736jsncdcd259f958b",
-            "X-RapidAPI-Host": "travel-advisor.p.rapidapi.com",
+            "X-RapidAPI-Key": process.env.XRapidAPIKey,
+            "X-RapidAPI-Host": process.env.XRapidAPIHost,
             useQueryString: true,
         },
     };
@@ -409,14 +316,131 @@ function getLocationID(whereto) {
             const locationID =
                 jsData.data.Typeahead_autocomplete.results[0].detailsV2
                     .locationId;
-            id = locationID;
-            console.log("The user chose to go " + id);
-            return id;
+            global.locationID = locationID;
+            console.log("In planner, the Location ID is " + locationID);
+            console.log(
+                "From planner, the user chose to go to " + global.locationID
+            );
         });
     });
 
     request.end();
-}
+
+    setTimeout(newPlan, 2000);
+
+    function newPlan() {
+        const newPlan = new PlannedTrip({
+            userID: req.user.id,
+            destination: req.body.destination,
+            locationID: global.locationID,
+            startDate: startDate.slice(0, 10),
+            endDate: endDate.slice(0, 10),
+            adult: req.body.adult,
+            children: req.body.children,
+            currency: req.body.currency,
+            activities: req.body.activities,
+            checklistdefault: defaultItems,
+            checklistdynamic: dynamicItems,
+        });
+
+        newPlan.save();
+        res.redirect("/myplans");
+    }
+});
+
+app.get("/whereto", function (req, res) {
+    global.locationID = null;
+    res.render("whereto");
+});
+
+app.post("/whereto", function (req, res, next) {
+    const whereto = encodeURIComponent(req.body.whereto);
+    global.whereto = whereto;
+
+    const options = {
+        method: "GET",
+        hostname: "travel-advisor.p.rapidapi.com",
+        port: null,
+        path:
+            "/locations/v2/auto-complete?query=" +
+            whereto +
+            "&lang=en_US&units=km",
+        headers: {
+            "X-RapidAPI-Key": process.env.XRapidAPIKey,
+            "X-RapidAPI-Host": process.env.XRapidAPIHost,
+            useQueryString: true,
+        },
+    };
+
+    const request = http.request(options, function (response) {
+        const chunks = [];
+
+        response.on("data", function (chunk) {
+            chunks.push(chunk);
+        });
+
+        response.on("end", function () {
+            const body = Buffer.concat(chunks);
+            const stringData = body.toString();
+            const jsData = JSON.parse(stringData);
+            const locationID =
+                jsData.data.Typeahead_autocomplete.results[0].detailsV2
+                    .locationId;
+            global.locationID = locationID;
+            console.log("In whereto, the Location ID is " + locationID);
+            console.log(
+                "From whereto, the user chose to go to " + global.locationID
+            );
+        });
+    });
+
+    request.end();
+
+    setTimeout(res.redirect("/services"), 2000);
+});
+
+app.get("/services", function (req, res) {
+    res.render("services");
+});
+
+app.get("/services/bookflights", function (req, res) {
+    url = "https://www.tripadvisor.com/Flights-g" + global.locationID;
+    res.redirect(url);
+});
+
+app.get("/services/book-accomodation", function (req, res) {
+    url = "https://www.tripadvisor.com/Hotels-g" + global.locationID;
+    res.redirect(url);
+});
+
+app.get("/services/tour-guide", function (req, res) {
+    tab = "tour_guides";
+    url = "https://www.tourhq.com/" + whereto + "-tours-guide?tab=" + tab;
+    res.redirect(url);
+});
+
+app.get("/services/things-to-do", function (req, res) {
+    url = "https://www.tripadvisor.com/Attractions-g" + global.locationID;
+    res.redirect(url);
+});
+
+app.get("/services/restaurants-recommendations", function (req, res) {
+    url = "https://www.tripadvisor.com/Restaurants-g" + global.locationID;
+    res.redirect(url);
+});
+
+app.get("/signin", function (req, res) {
+    res.render("signin");
+});
+
+app.post("/logout", function (req, res, next) {
+    req.logout(function (err) {
+        if (err) {
+            return next(err);
+        }
+        res.redirect("/");
+    });
+});
 
 app.listen(3000, function () {
     console.log("Server started on port 3000");
