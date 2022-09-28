@@ -123,7 +123,7 @@ global.whereto;
 passport.use(User.createStrategy());
 
 passport.serializeUser(function (user, done) {
-    done(null, user.id);
+    done(null, user);
 });
 
 passport.deserializeUser(function (id, done) {
@@ -144,13 +144,18 @@ passport.use(
         function (accessToken, refreshToken, profile, cb) {
             console.log(profile);
 
-            User.findOrCreate(
+            User.find(
                 {
                     googleId: profile.id,
-                    username: profile.displayName,
-                    email: profile.emails[0].value,
                 },
                 function (err, user) {
+                    if (!user.lenght) {
+                        User.create({
+                            googleId: profile.id,
+                            username: profile.displayName,
+                            email: profile.emails[0].value,
+                        });
+                    }
                     return cb(err, user);
                 }
             );
@@ -167,12 +172,18 @@ passport.use(
                 "https://young-bayou-18229.herokuapp.com/auth/facebook/callback",
         },
         function (accessToken, refreshToken, profile, cb) {
-            User.findOrCreate(
+            User.find(
                 {
                     facebookId: profile.id,
-                    username: profile.displayName,
                 },
                 function (err, user) {
+                    if (!user.lenght) {
+                        User.create({
+                            facebookId: profile.id,
+                            username: profile.displayName,
+                            email: profile.email,
+                        });
+                    }
                     return cb(err, user);
                 }
             );
